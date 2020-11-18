@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@main
       - name: Install Dependencies
         working-directory: ./front-end
-        run: npm install
+        run: yarn install
       - name: Build
         working-directory: ./front-end
         run: npm run build
