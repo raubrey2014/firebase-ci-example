@@ -2,11 +2,9 @@ name: Deploy Front End Preview on PR
 
 on:
   pull_request:
-    branches:
-      - main
     # Optionally configure to run only for specific files. For example:
-    # paths:
-    - "front-end/**"
+    paths:
+      - "front-end/**"
 
 jobs:
   build:
