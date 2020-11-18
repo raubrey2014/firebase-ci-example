@@ -31,6 +31,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Sign up for our thing.. :)</h1>
+        <h1 className={styles.title}>What happens to the PR when I update?</h1>
 
         <Row>
           <Col xs={24} sm={10} style={{ margin: 10 }}>
