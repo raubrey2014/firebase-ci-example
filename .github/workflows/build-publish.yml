@@ -11,14 +11,12 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@main
-      - name: Go to front-end folder
-        run: cd front-end/
       - name: Install Dependencies
+        working-directory: ./front-end
         run: npm install
       - name: Build
+        working-directory: ./front-end
         run: npm run build
-      - name: Move back to main folder
-        run: cd ../
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
         with:
