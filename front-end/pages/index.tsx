@@ -4,7 +4,7 @@ import { db } from "../config";
 import { useEffect, useState } from "react";
 import User from "../components/User";
 import NewUserForm from "../components/NewUserForm";
-import { Card } from "antd";
+import { Card, Col, Row } from "antd";
 import "antd/dist/antd.css";
 
 const userCollection = db.collection("users");
@@ -32,17 +32,22 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>Sign up for our thing.. :)</h1>
 
-        <div style={{ display: "flex" }}>
-          <Card title="New User">
-            <NewUserForm onSuccess={getUsers} />
-          </Card>
-          <Card title="User List">
-            <h4>...these people have! (don't do it forreal)</h4>
-            {users.map((user, index) => (
-              <User key={`${user.uid}-${index}`} {...user} />
-            ))}
-          </Card>
-        </div>
+        <Row>
+          <Col xs={24} sm={10} style={{ margin: 10 }}>
+            <Card title="New User">
+              <NewUserForm onSuccess={getUsers} />
+            </Card>
+          </Col>
+
+          <Col xs={24} sm={10} style={{ margin: 10 }}>
+            <Card title="User List">
+              <h4>...these people have! (don't do it forreal)</h4>
+              {users.map((user, index) => (
+                <User key={`${user.uid}-${index}`} {...user} />
+              ))}
+            </Card>
+          </Col>
+        </Row>
       </main>
 
       <footer className={styles.footer}>
