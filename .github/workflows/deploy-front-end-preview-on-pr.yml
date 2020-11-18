@@ -53,3 +53,9 @@ jobs:
           echo "${{ steps.preview_step.outputs.details_url }}\n"
           echo "${{ steps.preview_step.outputs.urls }}\n"
           echo "${{ steps.preview_step.outputs.expire_time }}\n"
+      - name: Notify Slack
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.SLACK_RYAN_WEBHOOK }}
+          headers: '{"Content-type": "application/json"}'
+          body: '{"text": "Preview available here: ${{ steps.preview_step.outputs.details_url }}"}'

@@ -4,8 +4,10 @@ import { db } from "../config";
 import { useEffect, useState } from "react";
 import User from "../components/User";
 import NewUserForm from "../components/NewUserForm";
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Layout } from "antd";
 import "antd/dist/antd.css";
+
+const { Header, Content, Footer } = Layout;
 
 const userCollection = db.collection("users");
 
@@ -23,7 +25,7 @@ export default function Home() {
     getUsers();
   }, []);
   return (
-    <div className={styles.container}>
+    <Header>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -51,7 +53,7 @@ export default function Home() {
         </Row>
       </main>
 
-      <footer className={styles.footer}>
+      <Footer>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
@@ -60,7 +62,7 @@ export default function Home() {
           Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
-      </footer>
-    </div>
+      </Footer>
+    </Header>
   );
 }
