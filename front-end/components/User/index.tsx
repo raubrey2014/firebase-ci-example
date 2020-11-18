@@ -3,14 +3,15 @@ import { FC } from "react";
 interface Props {
   firstName: string;
   lastName: string;
-  displayName: string;
   email: string;
 }
 
-const User: FC<Props> = ({ displayName, email }) => {
+const User: FC<Props> = ({ firstName, lastName, email }) => {
   return (
     <div>
-      <h4>{displayName}</h4>
+      <h4>
+        {firstName} {lastName}
+      </h4>
       <p>{email}</p>
     </div>
   );

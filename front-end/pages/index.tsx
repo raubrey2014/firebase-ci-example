@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import { db } from "../config";
 import { useEffect, useState } from "react";
 import User from "../components/User";
+import NewUserForm from "../components/NewUserForm";
 
 const userCollection = db.collection("users");
 
@@ -27,13 +28,19 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>Sign up for our thing.. :)</h1>
 
-        {users.map((user) => (
-          <User key={user.uid} {...user} />
-        ))}
+        <div style={{ display: "flex" }}>
+          <div style={{ marginRight: "3rem" }}>
+            <NewUserForm onSuccess={getUsers} />
+          </div>
+          <div>
+            <h4>...these people have! (don't do it forreal)</h4>
+            {users.map((user, index) => (
+              <User key={`${user.uid}-${index}`} {...user} />
+            ))}
+          </div>
+        </div>
       </main>
 
       <footer className={styles.footer}>
