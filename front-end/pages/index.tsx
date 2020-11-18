@@ -28,7 +28,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>This is a change in a PR.</h1>
+        <h1 className={styles.title}>This synchronizes with the PR.</h1>
         <h1 className={styles.title}>Sign up for our thing.. :)</h1>
 
         <div style={{ display: "flex" }}>
