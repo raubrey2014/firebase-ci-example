@@ -4,6 +4,8 @@ import { db } from "../config";
 import { useEffect, useState } from "react";
 import User from "../components/User";
 import NewUserForm from "../components/NewUserForm";
+import { Card } from "antd";
+import "antd/dist/antd.css";
 
 const userCollection = db.collection("users");
 
@@ -28,19 +30,18 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>This synchronizes with the PR.</h1>
         <h1 className={styles.title}>Sign up for our thing.. :)</h1>
 
         <div style={{ display: "flex" }}>
-          <div style={{ marginRight: "3rem" }}>
+          <Card title="New User">
             <NewUserForm onSuccess={getUsers} />
-          </div>
-          <div>
+          </Card>
+          <Card title="User List">
             <h4>...these people have! (don't do it forreal)</h4>
             {users.map((user, index) => (
               <User key={`${user.uid}-${index}`} {...user} />
             ))}
-          </div>
+          </Card>
         </div>
       </main>
 

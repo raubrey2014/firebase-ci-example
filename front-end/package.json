@@ -9,6 +9,7 @@
     "export": "next export"
   },
   "dependencies": {
+    "antd": "^4.8.4",
     "firebase": "^8.0.2",
     "formik": "^2.2.5",
     "next": "10.0.2",
