@@ -39,9 +39,17 @@ jobs:
         with:
           name: distOfPR
           path: front-end/out
-      - name: Deploy Preview to Firebase
-        uses: w9jds/firebase-action@master
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        id: preview_step
         with:
-          args: hosting:channel:deploy preview --expires 7d
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          expires: 30d
+          projectId: firebase-ci-example
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_CLI_PREVIEWS: hostingchannels
+      - name: Echo URL
+        run: |
+          echo "${{ steps.preview_step.outputs.details_url }}\n"
+          echo "${{ steps.preview_step.outputs.urls }}\n"
+          echo "${{ steps.preview_step.outputs.expire_time }}\n"
