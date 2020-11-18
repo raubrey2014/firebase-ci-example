@@ -35,7 +35,7 @@ jobs:
           name: front-end/out
           path: front-end/out
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@main
+        uses: w9jds/firebase-action@master
         with:
           args: deploy
         env:
