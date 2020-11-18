@@ -14,9 +14,12 @@ jobs:
       - name: Install Dependencies
         working-directory: ./front-end
         run: yarn install
-      - name: Build
+      - name: Build Next.js
         working-directory: ./front-end
         run: yarn run build
+      - name: Export Next.js bundle
+        working-directory: ./front-end
+        run: yarn run export
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
         with:
