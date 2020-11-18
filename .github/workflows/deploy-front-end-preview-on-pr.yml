@@ -1,0 +1,49 @@
+name: Deploy Front End Preview on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    # Optionally configure to run only for specific files. For example:
+    # paths:
+    - "front-end/**"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        working-directory: ./front-end
+        run: yarn install
+      - name: Build Next.js
+        working-directory: ./front-end
+        run: yarn run build
+      - name: Export Next.js bundle
+        working-directory: ./front-end
+        run: yarn run export
+      - name: Archive Preview Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: distOfPR
+          path: front-end/out
+  deploy:
+    name: Deploy Preview
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: distOfPR
+          path: front-end/out
+      - name: Deploy Preview to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: hosting:channel:deploy preview --expires 7d
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
