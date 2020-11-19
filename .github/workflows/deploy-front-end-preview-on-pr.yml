@@ -47,7 +47,7 @@ jobs:
           expires: 30d
           projectId: firebase-ci-example
       - name: Notify Slack
-        if: ${{ github.event.pull_request.action == "opened"}}
+        if: github.event.pull_request.action == 'opened'
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.SLACK_RYAN_WEBHOOK }}
