@@ -8,6 +8,23 @@ interface Props {
 
 const userCollection = db.collection("users");
 
+const FormFieldError = ({ errors, touched, id }) => {
+  const show = errors[id] && touched[id];
+  return (
+    <div style={{ height: "1rem", overflow: "hidden" }}>
+      <p
+        style={{
+          fontSize: 10,
+          color: "red",
+          opacity: show ? 1 : 0,
+        }}
+      >
+        {errors[id]}
+      </p>
+    </div>
+  );
+};
+
 const NewUserForm: FC<Props> = ({ onSuccess }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -57,9 +74,8 @@ const NewUserForm: FC<Props> = ({ onSuccess }) => {
                 onBlur={handleBlur}
                 value={values.email}
               />
-              {errors.email && touched.email && (
-                <p style={{ fontSize: 10, color: "red" }}>{errors.email}</p>
-              )}
+
+              <FormFieldError id="email" {...{ errors, touched }} />
             </div>
             <div>
               <div>
@@ -72,9 +88,7 @@ const NewUserForm: FC<Props> = ({ onSuccess }) => {
                 onBlur={handleBlur}
                 value={values.firstName}
               />
-              {errors.firstName && touched.firstName && (
-                <p style={{ fontSize: 10, color: "red" }}>{errors.firstName}</p>
-              )}
+              <FormFieldError id="firstName" {...{ errors, touched }} />
             </div>
             <div>
               <div>
@@ -87,9 +101,7 @@ const NewUserForm: FC<Props> = ({ onSuccess }) => {
                 onBlur={handleBlur}
                 value={values.lastName}
               />
-              {errors.lastName && touched.lastName && (
-                <p style={{ fontSize: 10, color: "red" }}>{errors.lastName}</p>
-              )}
+              <FormFieldError id="lastName" {...{ errors, touched }} />
             </div>
             <button type="submit" disabled={isSubmitting}>
               Submit
