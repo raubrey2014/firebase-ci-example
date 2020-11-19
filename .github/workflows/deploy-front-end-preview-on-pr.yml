@@ -54,6 +54,7 @@ jobs:
           echo "${{ steps.preview_step.outputs.urls }}\n"
           echo "${{ steps.preview_step.outputs.expire_time }}\n"
       - name: Notify Slack
+        if: ${{ github.event.pull_request.action == "opened"}}
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.SLACK_RYAN_WEBHOOK }}
