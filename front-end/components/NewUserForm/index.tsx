@@ -25,6 +25,31 @@ const FormFieldError = ({ errors, touched, id }) => {
   );
 };
 
+const FormField = ({
+  type,
+  name,
+  label,
+  errors,
+  touched,
+  handleChange,
+  handleBlur,
+  values,
+}) => {
+  return (
+    <>
+      <div>
+        <label>{label}</label>
+      </div>
+      <input
+        {...{ type, name, handleChange, handleBlur }}
+        value={values[name]}
+      />
+
+      <FormFieldError id={name} {...{ errors, touched }} />
+    </>
+  );
+};
+
 const NewUserForm: FC<Props> = ({ onSuccess }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -64,45 +89,25 @@ const NewUserForm: FC<Props> = ({ onSuccess }) => {
           <form onSubmit={handleSubmit}>
             <div>
               <h4>{isSubmitting ? "Submitting..." : "Enter your info!"}</h4>
-              <div>
-                <label>Email</label>
-              </div>
-              <input
-                type="email"
-                name="email"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-              />
-
-              <FormFieldError id="email" {...{ errors, touched }} />
             </div>
-            <div>
-              <div>
-                <label>First Name</label>
-              </div>
-              <input
-                type="text"
-                name="firstName"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.firstName}
-              />
-              <FormFieldError id="firstName" {...{ errors, touched }} />
-            </div>
-            <div>
-              <div>
-                <label>Last Name</label>
-              </div>
-              <input
-                type="text"
-                name="lastName"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.lastName}
-              />
-              <FormFieldError id="lastName" {...{ errors, touched }} />
-            </div>
+            <FormField
+              name="email"
+              type="email"
+              label="Email"
+              {...{ errors, values, touched, handleBlur, handleChange }}
+            />
+            <FormField
+              name="firstName"
+              type="text"
+              label="First Name"
+              {...{ errors, values, touched, handleBlur, handleChange }}
+            />
+            <FormField
+              name="lastName"
+              type="text"
+              label="Last Name"
+              {...{ errors, values, touched, handleBlur, handleChange }}
+            />
             <button type="submit" disabled={isSubmitting}>
               Submit
             </button>
