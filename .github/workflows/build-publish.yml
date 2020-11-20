@@ -71,22 +71,25 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [build_frontend, build_functions]
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Download Frontend Artifact
+      - if: ${{ needs.changes.outputs.frontend == 'true' }}
+        name: Download Frontend Artifact
         uses: actions/download-artifact@v2
         with:
           name: frontend
           path: front-end/out
-      - name: Download Functions Artifact
+      - if: ${{ needs.changes.outputs.functions == 'true' }}
+        name: Download Functions Artifact
         uses: actions/download-artifact@v2
         with:
           name: functions
           path: functions/lib
-      - name: Deploy to Firebase
+      - if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.functions == 'true' }}
+        name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy
