@@ -21,6 +21,9 @@ jobs:
               - 'front-end/**'
             functions:
               - 'functions/**'
+            firestore:
+              - 'firestore.rules'
+              - 'firestore.indexes.json'
 
   build_frontend:
     needs: changes
@@ -97,7 +100,7 @@ jobs:
         with:
           name: functions
           path: functions/lib
-      - if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.functions == 'true' }}
+      - if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.functions == 'true' || needs.changes.outputs.firestore == 'true' }}
         name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
