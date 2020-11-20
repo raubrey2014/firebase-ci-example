@@ -13,7 +13,7 @@ jobs:
       functions: ${{ steps.filter.outputs.functions }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
       - name: Install Dependencies
         working-directory: ./front-end
         run: yarn install
@@ -40,24 +40,52 @@ jobs:
       - name: Export Next.js bundle
         working-directory: ./front-end
         run: yarn run export
-      - name: Archive Production Artifact
-        uses: actions/upload-artifact@main
+      - name: Archive Frontend Artifact
+        uses: actions/upload-artifact@v2
         with:
           name: frontend
           path: front-end/out
 
-  deploy:
-    name: Deploy
-    needs: build_frontend
+  build_functions:
+    needs: changes
+    if: ${{ needs.changes.outputs.functions == 'true' }}
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@main
-      - name: Download Artifact
-        uses: actions/download-artifact@main
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        working-directory: ./functions
+        run: yarn install
+      - name: Lint functions
+        working-directory: ./functions
+        run: yarn run lint
+      - name: Build functions
+        working-directory: ./functions
+        run: yarn run build
+      - name: Archive Functions Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: functions
+          path: functions/lib
+
+  deploy:
+    name: Deploy
+    needs: [build_frontend, build_functions]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Download Frontend Artifact
+        uses: actions/download-artifact@v2
         with:
           name: frontend
           path: front-end/out
+      - name: Download Functions Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: functions
+          path: functions/lib
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
