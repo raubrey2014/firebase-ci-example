@@ -5,26 +5,7 @@ on:
       - main
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      frontend: ${{ steps.filter.outputs.frontend }}
-      functions: ${{ steps.filter.outputs.functions }}
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            frontend:
-              - 'front-end/**'
-            functions:
-              - 'functions/**'
-
   build_frontend:
-    needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
     name: Build Frontend
     runs-on: ubuntu-latest
     steps:
@@ -46,8 +27,6 @@ jobs:
           path: front-end/out
 
   build_functions:
-    needs: changes
-    if: ${{ needs.changes.outputs.functions == 'true' }}
     name: Build Functions
     runs-on: ubuntu-latest
     steps:
@@ -70,29 +49,17 @@ jobs:
 
   deploy:
     name: Deploy Apps and Functions
-
-    # These two lines ensure the Deploy step happens last
-    # AND that is happens regardless of whether one of them was skipped.
-    # This could have been solved with fail-fast, but that has bigger
-    # implications for each job.
     needs: [build_functions, build_frontend]
-    if: always()
-
-    # Says, run each step even if some are skipped
-    strategy:
-      fail-fast: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - if: ${{ needs.changes.outputs.frontend == 'true' }}
-        name: Download Frontend Artifact
+      - name: Download Frontend Artifact
         uses: actions/download-artifact@v2
         with:
           name: frontend
           path: front-end/out
-      - if: ${{ needs.changes.outputs.functions == 'true' }}
-        name: Download Functions Artifact
+      - name: Download Functions Artifact
         uses: actions/download-artifact@v2
         with:
           name: functions
