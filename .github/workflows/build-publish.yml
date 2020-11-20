@@ -71,6 +71,7 @@ jobs:
 
   deploy:
     name: Deploy
+    needs: [build_functions, build_frontend]
     if: always()
     runs-on: ubuntu-latest
     steps:
