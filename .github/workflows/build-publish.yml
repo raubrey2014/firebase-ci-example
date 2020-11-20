@@ -5,7 +5,30 @@ on:
       - main
 
 jobs:
-  build:
+  changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      functions: ${{ steps.filter.outputs.functions }}
+      core: ${{ steps.filter.outputs.core }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@main
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'front-end/**'
+            functions:
+              - 'functions/**'
+            core:
+              - 'core/**'
+
+  build_frontend:
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.core == 'true' }}
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -23,11 +46,12 @@ jobs:
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
         with:
-          name: out
+          name: frontend
           path: front-end/out
+
   deploy:
     name: Deploy
-    needs: build
+    needs: build_frontend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -35,7 +59,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@main
         with:
-          name: out
+          name: frontend
           path: front-end/out
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
