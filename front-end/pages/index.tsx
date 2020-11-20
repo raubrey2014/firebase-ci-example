@@ -3,24 +3,14 @@ import styles from "../styles/Home.module.css";
 import { db } from "../config";
 import { useEffect, useState } from "react";
 import User from "../components/User";
-import NewUserForm from "../components/NewUserForm";
-import { Card, Col, Row, Layout } from "antd";
+import { Row, Layout } from "antd";
 import "antd/dist/antd.css";
 import Greeting from "../components/Greeting";
+import { UserList } from "../components/UserList";
 
 const { Header, Footer } = Layout;
 
-const userCollection = db.collection("users");
-
 export default function Home() {
-  const [users, setUsers] = useState([]);
-  const getUsers = async () => {
-    const snapshot = await userCollection.get();
-    setUsers(snapshot.docs.map((x) => x.data()));
-  };
-  useEffect(() => {
-    getUsers();
-  }, []);
   return (
     <Header>
       <Head>
@@ -34,24 +24,10 @@ export default function Home() {
         </h1>
 
         <Row>
-          <Col xs={24} sm={10} style={{ margin: 10 }}>
-            <Card title="New User">
-              <NewUserForm onSuccess={getUsers} />
-            </Card>
-          </Col>
-
-          <Col xs={24} sm={10} style={{ margin: 10 }}>
-            <Card title="User List">
-              <h4>...these people have! (don't do it forreal)</h4>
-              {users.map((user, index) => (
-                <User key={`${user.uid}-${index}`} {...user} />
-              ))}
-            </Card>
-          </Col>
-        </Row>
-        <Row>
           <Greeting />
         </Row>
+
+        <UserList />
       </main>
 
       <Footer>
