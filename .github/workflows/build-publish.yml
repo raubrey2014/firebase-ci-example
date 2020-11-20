@@ -7,7 +7,6 @@ on:
 jobs:
   changes:
     runs-on: ubuntu-latest
-
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       functions: ${{ steps.filter.outputs.functions }}
@@ -26,7 +25,7 @@ jobs:
   build_frontend:
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
-    name: Build
+    name: Build Frontend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -49,7 +48,7 @@ jobs:
   build_functions:
     needs: changes
     if: ${{ needs.changes.outputs.functions == 'true' }}
-    name: Build
+    name: Build Functions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -71,8 +70,17 @@ jobs:
 
   deploy:
     name: Deploy
+
+    # These two lines ensure the Deploy step happens last
+    # AND that is happens regardless of whether one of them was skipped.
+    # This could have been solved with fail-fast, but that has bigger
+    # implications for each job.
     needs: [build_functions, build_frontend]
     if: always()
+
+    # Says, run each step even if some are skipped
+    strategy:
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
