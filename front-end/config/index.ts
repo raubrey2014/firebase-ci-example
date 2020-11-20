@@ -19,6 +19,4 @@ const app = !firebase.apps.length
 const db = app.firestore();
 const functions = app.functions();
 
-functions.useEmulator("localhost", 5555);
-
 export { db, functions };
