@@ -21,9 +21,6 @@ jobs:
               - 'front-end/**'
             functions:
               - 'functions/**'
-            firestore:
-              - 'firestore.rules'
-              - 'firestore.indexes.json'
 
   build_frontend:
     needs: changes
@@ -72,7 +69,7 @@ jobs:
           path: functions/lib
 
   deploy:
-    name: Deploy
+    name: Deploy Apps and Functions
 
     # These two lines ensure the Deploy step happens last
     # AND that is happens regardless of whether one of them was skipped.
@@ -100,8 +97,7 @@ jobs:
         with:
           name: functions
           path: functions/lib
-      - if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.functions == 'true' || needs.changes.outputs.firestore == 'true' }}
-        name: Deploy to Firebase
+      - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy
