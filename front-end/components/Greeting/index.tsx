@@ -10,7 +10,6 @@ const Greeting: FC = () => {
   const greet = async () => {
     setLoading(true);
     const result = await functions.httpsCallable("helloWorld")();
-    console.log(result.data);
     setGreeting(result.data);
     setTimeout(() => {
       setLoading(false);

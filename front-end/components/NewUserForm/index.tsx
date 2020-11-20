@@ -1,7 +1,10 @@
 import { FC } from "react";
 import { Formik } from "formik";
 import { db } from "../../config";
-import { isValidEmail } from "../../../core";
+
+function isValidEmail(email: string): boolean {
+  return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+}
 
 interface Props {
   onSuccess: Function;
@@ -42,7 +45,9 @@ const FormField = ({
         <label>{label}</label>
       </div>
       <input
-        {...{ type, name, handleChange, handleBlur }}
+        {...{ type, name }}
+        onChange={handleChange}
+        onBlur={handleBlur}
         value={values[name]}
       />
 

@@ -6,20 +6,17 @@ import User from "../components/User";
 import NewUserForm from "../components/NewUserForm";
 import { Card, Col, Row, Layout } from "antd";
 import "antd/dist/antd.css";
+import Greeting from "../components/Greeting";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Footer } = Layout;
 
 const userCollection = db.collection("users");
 
 export default function Home() {
   const [users, setUsers] = useState([]);
   const getUsers = async () => {
-    const newUsers = [];
     const snapshot = await userCollection.get();
-    snapshot.forEach((x) => {
-      newUsers.push(x.data());
-    });
-    setUsers(newUsers);
+    setUsers(snapshot.docs.map((x) => x.data()));
   };
   useEffect(() => {
     getUsers();
@@ -51,6 +48,9 @@ export default function Home() {
               ))}
             </Card>
           </Col>
+        </Row>
+        <Row>
+          <Greeting />
         </Row>
       </main>
 

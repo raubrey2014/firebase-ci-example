@@ -11,7 +11,6 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       functions: ${{ steps.filter.outputs.functions }}
-      core: ${{ steps.filter.outputs.core }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@main
@@ -23,12 +22,10 @@ jobs:
               - 'front-end/**'
             functions:
               - 'functions/**'
-            core:
-              - 'core/**'
 
   build_frontend:
     needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.core == 'true' }}
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     name: Build
     runs-on: ubuntu-latest
     steps:
