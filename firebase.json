@@ -6,7 +6,12 @@
   "hosting": {
     "public": "front-end/out",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   },
   "emulators": {
     "auth": {
@@ -18,8 +23,17 @@
     "hosting": {
       "port": 5000
     },
+    "functions": {
+      "port": 5555
+    },
     "ui": {
       "enabled": true
     }
+  },
+  "functions": {
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ]
   }
 }

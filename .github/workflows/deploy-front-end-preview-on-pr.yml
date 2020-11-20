@@ -46,10 +46,10 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           expires: 30d
           projectId: firebase-ci-example
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
-      - name: Echo URL
-        run: |
-          echo "${{ steps.preview_step.outputs.details_url }}\n"
-          echo "${{ steps.preview_step.outputs.urls }}\n"
-          echo "${{ steps.preview_step.outputs.expire_time }}\n"
+      - name: Notify Slack
+        if: github.event.pull_request.action == 'opened'
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.SLACK_RYAN_WEBHOOK }}
+          headers: '{"Content-type": "application/json"}'
+          body: '{"text": "Preview available here: ${{ steps.preview_step.outputs.details_url }}"}'
